@@ -1,7 +1,7 @@
 # print_chat
 Small print tool for implementing chat in the terminal.
 
-# Usage example
+## Usage example
 ```python
 from print_chat import print_chat
 
@@ -21,10 +21,10 @@ while True:
 pc.close()
 ```
 
-# Important
+## Important
 ### Worth explaining: numbering starts at 1, at the end of the message list
 
-# Method list
+## Method list
 * .add_message(sender, text)
 * .reload(number)
 * .load(number)
@@ -43,7 +43,7 @@ pc.close()
 * .get_num_messages()         - returns the number of messages
 * .get_messages(start, end)   - returns a slice of messages
 
-# Installation
+## Installation
 Repository cloning
 ```
 $ git clone https://github.com/IVIGOR13/print_chat.git
