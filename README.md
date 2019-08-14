@@ -15,7 +15,7 @@ while True:
     if post == 'exit':
         break
     else:
-        print('\x1b[A', end='')  # print carriage lift
+        up_on_occupied_rows(len(post) + 2)
         pc.add_message('Charls', post)
 
 pc.close()
@@ -30,7 +30,7 @@ pc.close()
 * .load(number)
 * .remove(number)
 * .edit(number, text)
-* .set_colors(colors)        - takes a list [[sender, color],..]
+* .set_colors(colors)               - takes a list [[sender, color],..]
    colors list:
      * grey
      * red
@@ -40,8 +40,10 @@ pc.close()
      * magenta
      * cyan
      * white
-* .get_num_messages()         - returns the number of messages
-* .get_messages(start, end)   - returns a slice of messages
+* .get_num_messages()               - returns the number of messages
+* .get_messages(start, end)         - returns a slice of messages
+* .up_on_occupied_rows(len_str)     
+* .up_on_rows(number)
 
 ## Installation
 Repository cloning
