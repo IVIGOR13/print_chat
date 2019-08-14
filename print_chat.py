@@ -22,6 +22,15 @@ class print_chat:
         print('\x1b[A', end='')
         if clr:
             self._clear_screen()
+            
+            
+    def up_on_rows(self, number):
+        print('\x1b[A' * number, end='')
+        
+
+    def up_on_occupied_rows(self, len_str):
+        n = (len_str // (os.get_terminal_size().columns-1)) + 1
+        print('\x1b[A' * n, end='')
 
 
     def get_num_messages():
