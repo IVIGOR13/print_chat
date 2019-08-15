@@ -15,7 +15,7 @@ while True:
     if post == 'exit':
         break
     else:
-        up_on_occupied_rows(len(post) + 2)
+        pc.up_on_occupied_rows(len(post) + 2)
         pc.add_message('Charls', post)
 
 pc.close()
