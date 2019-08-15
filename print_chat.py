@@ -33,11 +33,11 @@ class print_chat:
         print('\x1b[A' * n, end='')
 
 
-    def get_num_messages():
+    def get_num_messages(self):
         return(len(self.MESSAGES))
 
 
-    def get_messages(start, end):
+    def get_messages(self, start, end):
         return self.MESSAGES[len(self.MESSAGES)-end : len(self.MESSAGES)-start]
 
 
