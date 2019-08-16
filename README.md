@@ -23,7 +23,7 @@ pc.close()
 ```
 
 ## Important
-### Worth explaining: numbering starts at 1, at the end of the message list
+### Numbering starts at 1, at the end of the message list
 
 ## Create object
 default:
