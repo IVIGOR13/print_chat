@@ -2,7 +2,6 @@
 # Author: Igor Ivanov
 # 2019
 #
-
 import time
 import os
 from termcolor import colored
@@ -19,18 +18,23 @@ class print_chat:
     def close(self, clr=False):
         self.MESSAGES.clear()
         self.sender_color.clear()
-        print('\x1b[A', end='')
+        print('\x1b[A\r', end='')
         if clr:
             self._clear_screen()
-            
-            
+
+
     def up_on_rows(self, number):
-        print('\x1b[A' * number, end='')
-        
+        print(('\x1b[A\r' + ' ' * os.get_terminal_size().columns + '\r') * number, end='')
+
+
+    def up_on_message(self, number):
+        n = self.__get_lines(number)
+        self.up_on_rows(n)
+
 
     def up_on_occupied_rows(self, len_str):
-        n = (len_str // (os.get_terminal_size().columns-1)) + 1
-        print('\x1b[A' * n, end='')
+        lines = ((len_str-1) // os.get_terminal_size().columns) + 1
+        self.up_on_rows(lines)
 
 
     def get_num_messages(self):
@@ -38,7 +42,9 @@ class print_chat:
 
 
     def get_messages(self, start, end):
-        return self.MESSAGES[len(self.MESSAGES)-end : len(self.MESSAGES)-start]
+        s = len(self.MESSAGES) - end + 1
+        e = len(self.MESSAGES) - start + 1
+        return self.MESSAGES[s:e]
 
 
     def set_colors(self, colors):
@@ -50,13 +56,11 @@ class print_chat:
         lines = 0
         for i in range(number):
             m = self.MESSAGES[(len(self.MESSAGES)-1) - i]
-            l = ((len(m[0]) + len(m[1]) + 4) // (os.get_terminal_size().columns+1)) + 1
-            m[2] = l
-            lines += l
+            lines += (((len(m['sender']) + len(m['message']) + 4)-1) // os.get_terminal_size().columns) + 1
         return lines
 
 
-    def __print_mess(self, sender, text, lines):
+    def __print_mess(self, sender, text):
 
         if not sender in self.sender_color: c0, c1 = 'white', 'grey'
         else: c0, c1 = 'grey', self.sender_color[sender]
@@ -79,40 +83,41 @@ class print_chat:
 
 
     def reload(self, number):
-        if number > 0 and number < len(self.MESSAGES):
-            print('\x1b[A\r' * self.__get_lines(number), end='')
+        if number >= 0 and number <= len(self.MESSAGES):
+            self.up_on_message(number)
             for i in self.MESSAGES[len(self.MESSAGES)-number:len(self.MESSAGES)]:
-                self.__print_mess(i[0], i[1], i[2])
+                self.__print_mess(i['sender'], i['message'])
 
 
     def load(self, number):
-        if number > 0 and number < len(self.MESSAGES):
+        if number >= 0 and number <= len(self.MESSAGES):
             for i in self.MESSAGES[len(self.MESSAGES)-number:len(self.MESSAGES)]:
-                self.__print_mess(i[0], i[1], i[2])
+                self.__print_mess(i['sender'], i['message'])
 
 
     def remove(self, number):
-        if number > 0 and number < len(self.MESSAGES):
-            print(('\x1b[A\r' + ' ' * os.get_terminal_size().columns + '\r') * self.__get_lines(number), end='')
+        if number >= 0 and number <= len(self.MESSAGES):
             self.MESSAGES.pop(len(self.MESSAGES) - number)
+            self.up_on_message(number)
             self.load(number-1)
 
 
     def edit(self, number, text):
-        if number > 0 and number < len(self.MESSAGES):
-            print(('\x1b[A\r' + ' ' * os.get_terminal_size().columns + '\r') * self.__get_lines(number), end='')
-            self.MESSAGES[len(self.MESSAGES) - number][1] = text
-            self.load(number)
+        if number >= 0 and number <= len(self.MESSAGES):
+            n = len(self.MESSAGES) - number
+            self.MESSAGES[n].update({'sender': self.MESSAGES[n]['sender'], 'message': text})
+            self.reload(number)
 
 
     def add_message(self, sender, text):
         if text != '':
-            lines = ((len(sender) + len(text) + 4) // os.get_terminal_size().columns) + 1
-            self.MESSAGES.append([sender, text, lines])
-            self.__print_mess(sender, text, lines)
+            self.MESSAGES.append({'id': self.id, 'sender': sender, 'message': text})
+            self.id += 1
+            self.__print_mess(sender, text)
 
 
     def __init__(self, clr=True, file_name=''):
+        self.id = 0
         self.MESSAGES = []
         self.sender_color = {}
         self.file_name = file_name
