@@ -7,6 +7,7 @@ from print_chat import print_chat
 
 pc = print_chat()
 
+sender = 'Charls'
 pc.set_colors([('Charls', 'green')])
 
 while True:
@@ -15,7 +16,7 @@ while True:
     if post == 'exit':
         break
     else:
-        pc.up_on_occupied_rows(len(post) + 2)
+        pc.up_on_occupied_rows(len(post) + len(sender) + 2)
         pc.add_message('Charls', post)
 
 pc.close()
@@ -24,12 +25,21 @@ pc.close()
 ## Important
 ### Worth explaining: numbering starts at 1, at the end of the message list
 
+## Create object
+default:
+```python
+pc = print_chat(clr=True, file_name='')
+```
+* clr - clear or not screen before output
+* file_name - the name of the message history file, if not specified, the file is not created
+
 ## Method list
 * .add_message(sender, text)
 * .reload(number)
 * .load(number)
 * .remove(number)
 * .edit(number, text)
+* .close()
 * .set_colors(colors)               - takes a list [[sender, color],..]
    colors list:
      * grey
@@ -42,7 +52,8 @@ pc.close()
      * white
 * .get_num_messages()               - returns the number of messages
 * .get_messages(start, end)         - returns a slice of messages
-* .up_on_occupied_rows(len_str)     
+* .up_on_occupied_rows(len_str)
+* .up_on_message(number)
 * .up_on_rows(number)
 
 ## Installation
