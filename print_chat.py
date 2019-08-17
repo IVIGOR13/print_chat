@@ -2,6 +2,10 @@
 # Author: Igor Ivanov
 # 2019
 #
+#
+# # TODO: get_senders()
+#
+#
 import time
 import os
 from termcolor import colored
@@ -48,24 +52,42 @@ class print_chat:
 
 
     def set_colors(self, colors):
-        for i in colors:
-            self.sender_color[i[0]] = i[1]
+        found = False
+        for color in colors:
+            for i in range(len(self.senders)):
+                if self.senders[i]['sender'] == color[0]:
+                    self.senders[i]['color'] = color[1]
+                    found = True
+
+            if not found:
+                self.senders.append({'id': self.id_sender, 'sender': color[0], 'color': color[1]})
+                self.id_sender += 1
 
 
     def __get_lines(self, number):
         lines = 0
         for i in range(number):
             m = self.MESSAGES[(len(self.MESSAGES)-1) - i]
-            lines += (((len(m['sender']) + len(m['message']) + 4)-1) // os.get_terminal_size().columns) + 1
+            l = (len(m['sender']) + len(m['message']) + self.len_frame)
+            lines += ((l-1) // os.get_terminal_size().columns) + 1
         return lines
 
 
     def __print_mess(self, sender, text):
 
-        if not sender in self.sender_color: c0, c1 = 'white', 'grey'
-        else: c0, c1 = 'grey', self.sender_color[sender]
+        a = ''
+        if self.time:
+            a = time.strftime("%H:%M", time.gmtime())
 
-        print(colored('[' + sender + ']', c0, ('on_' + c1)) + ': ', end='')
+        for i in self.senders:
+            if not i['sender'] == sender:
+                c0, c1 = 'white', 'grey'
+            else:
+                c0, c1 = 'grey', i['color']
+                break
+
+
+        print('[' + a + '] ' + colored('[' + sender + ']', c0, ('on_' + c1)) + ': ', end='')
         print(text, end='\n')
 
         if self.save_file:
@@ -111,15 +133,28 @@ class print_chat:
 
     def add_message(self, sender, text):
         if text != '':
-            self.MESSAGES.append({'id': self.id, 'sender': sender, 'message': text})
-            self.id += 1
+            text = " ".join(text.split())
+            self.MESSAGES.append({'id': self.id_message, 'sender': sender, 'message': text})
+            self.id_message += 1
             self.__print_mess(sender, text)
 
+            return (self.id_message-1)
 
-    def __init__(self, clr=True, file_name=''):
-        self.id = 0
+
+    def get_senders(self):
+        return self.senders
+
+
+    def __init__(self, clr=True, file_name='', time=False):
+        self.time = time
+        if time:
+            self.len_frame = 12
+        else:
+            self.len_frame = 4
+        self.id_message = 0
+        self.id_sender = 0
         self.MESSAGES = []
-        self.sender_color = {}
+        self.senders = []
         self.file_name = file_name
         if file_name != '':
             self.save_file = True
