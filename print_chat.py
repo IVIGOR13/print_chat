@@ -2,10 +2,6 @@
 # Author: Igor Ivanov
 # 2019
 #
-#
-# # TODO: get_senders()
-#
-#
 import time
 import os
 from termcolor import colored
