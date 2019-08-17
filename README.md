@@ -55,6 +55,7 @@ pc = print_chat(clr=True, file_name='')
 * .up_on_occupied_rows(len_str)
 * .up_on_message(number)
 * .up_on_rows(number)
+* .get_senders()                    - returns a list of dictionaries
 
 ## Installation
 Repository cloning
