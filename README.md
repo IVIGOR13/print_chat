@@ -39,6 +39,7 @@ pc = print_chat(clr=True, file_name='')
 * .load(number)
 * .remove(number)
 * .edit(number, text)
+* .add_skip(text)                
 * .close(clr)                       - closes the dialog, with or without screen clearing
 * .set_colors(colors)               - takes a list [[sender, color],..]
    colors list:
