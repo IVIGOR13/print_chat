@@ -17,7 +17,7 @@ class print_chat:
 
     def close(self, clr=False):
         self.MESSAGES.clear()
-        self.sender_color.clear()
+        self.senders.clear()
         print('\x1b[A\r', end='')
         if clr:
             self._clear_screen()
@@ -35,6 +35,11 @@ class print_chat:
     def up_on_occupied_rows(self, len_str):
         lines = ((len_str-1) // os.get_terminal_size().columns) + 1
         self.up_on_rows(lines)
+
+
+    def down_on_rows(self, number):
+        print('\r' + ' ' * os.get_terminal_size().columns + '\r', end='')
+        print(('\n\r' + ' ' * os.get_terminal_size().columns + '\r') * (number-1), end='')
 
 
     def get_num_messages(self):
@@ -65,7 +70,12 @@ class print_chat:
         for i in range(number):
             m = self.MESSAGES[(len(self.MESSAGES)-1) - i]
             l = (len(m['sender']) + len(m['message']) + self.len_frame)
-            lines += ((l-1) // os.get_terminal_size().columns) + 1
+            s = 0
+            for j in self.skips[(len(self.skips)-1) - i][1]:
+                s += ((len(j)-1) // os.get_terminal_size().columns) + 1
+            self.skips[(len(self.skips)-1) - i][0] = s
+
+            lines += (((l-1) // os.get_terminal_size().columns) + 1) + s
         return lines
 
 
@@ -73,7 +83,7 @@ class print_chat:
 
         a = ''
         if self.time:
-            a = time.strftime("%H:%M", time.gmtime())
+            a = '[{}]'.format(time.strftime("%H:%M", time.gmtime()))
 
         for i in self.senders:
             if not i['sender'] == sender:
@@ -82,8 +92,7 @@ class print_chat:
                 c0, c1 = 'grey', i['color']
                 break
 
-
-        print('[' + a + '] ' + colored('[' + sender + ']', c0, ('on_' + c1)) + ': ', end='')
+        print(a + colored('[' + sender + ']', c0, ('on_' + c1)) + ': ', end='')
         print(text, end='\n')
 
         if self.save_file:
@@ -97,31 +106,61 @@ class print_chat:
             except IOError:
                 file = open(self.file_name, 'w')
 
-            file.write(str + '[' + dt + '][' + sender + ']' + ': ' + text + '\n')
+            file.write(str + '[' + dt + '] [' + sender + ']' + ': ' + text + '\n')
+
+
+    def add_skip(self, text):
+
+        lines = ((len(str(text))-1) // os.get_terminal_size().columns) + 1
+
+        if not self.skips:
+            self.skips.append([lines, [text]])
+        else:
+            self.skips[len(self.skips)-1][0] += lines
+            if not self.skips[len(self.skips)-1][1]:
+                self.skips[len(self.skips)-1][1].append(str(text))
+            else:
+                self.skips[len(self.skips)-1][1].append(str(text))
+        print(text)
+
+
+    def print_skip(self, number):
+        if number > 0:
+            if self.skips[number][0] != 0:
+                for i in self.skips[number][1]:
+                    print(i)
 
 
     def reload(self, number):
-        if number >= 0 and number <= len(self.MESSAGES):
+        if number > 0 and number <= len(self.MESSAGES):
             self.up_on_message(number)
-            for i in self.MESSAGES[len(self.MESSAGES)-number:len(self.MESSAGES)]:
-                self.__print_mess(i['sender'], i['message'])
+            i = len(self.skips) - number
+            for m in self.MESSAGES[len(self.MESSAGES)-number:len(self.MESSAGES)]:
+                self.__print_mess(m['sender'], m['message'])
+                self.print_skip(i)
+                i += 1
 
 
     def load(self, number):
-        if number >= 0 and number <= len(self.MESSAGES):
-            for i in self.MESSAGES[len(self.MESSAGES)-number:len(self.MESSAGES)]:
-                self.__print_mess(i['sender'], i['message'])
+        if number > 0 and number <= len(self.MESSAGES):
+            i = len(self.skips) - number
+            for m in self.MESSAGES[len(self.MESSAGES)-number:len(self.MESSAGES)]:
+                self.__print_mess(m['sender'], m['message'])
+                self.print_skip(i)
+                i += 1
 
 
     def remove(self, number):
-        if number >= 0 and number <= len(self.MESSAGES):
-            self.MESSAGES.pop(len(self.MESSAGES) - number)
+        if number > 0 and number <= len(self.MESSAGES):
             self.up_on_message(number)
             self.load(number-1)
 
+            self.MESSAGES.pop(len(self.MESSAGES) - number)
+            self.skips.pop(len(self.skips) - number)
+
 
     def edit(self, number, text):
-        if number >= 0 and number <= len(self.MESSAGES):
+        if number > 0 and number <= len(self.MESSAGES):
             n = len(self.MESSAGES) - number
             self.MESSAGES[n].update({'sender': self.MESSAGES[n]['sender'], 'message': text})
             self.reload(number)
@@ -129,12 +168,18 @@ class print_chat:
 
     def add_message(self, sender, text):
         if text != '':
-            text = " ".join(text.split())
+
+            if not self.skips:
+                self.skips.append([0, []])
+
+            text = " ".join(str(text).split())
             self.MESSAGES.append({'id': self.id_message, 'sender': sender, 'message': text})
             self.id_message += 1
             self.__print_mess(sender, text)
 
-            return (self.id_message-1)
+            self.skips.append([0, []])
+
+            return self.id_message-1
 
 
     def get_senders(self):
@@ -151,6 +196,7 @@ class print_chat:
         self.id_sender = 0
         self.MESSAGES = []
         self.senders = []
+        self.skips = []
         self.file_name = file_name
         if file_name != '':
             self.save_file = True
