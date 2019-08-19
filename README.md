@@ -39,7 +39,8 @@ pc = print_chat(clr=True, file_name='')
 * .load(number)
 * .remove(number)
 * .edit(number, text)
-* .add_skip(text)                
+* .add_skip(text) 
+* .edit_skip(number, text)
 * .close(clr)                       - closes the dialog, with or without screen clearing
 * .set_colors(colors)               - takes a list [[sender, color],..]
    colors list:
@@ -53,10 +54,12 @@ pc = print_chat(clr=True, file_name='')
      * white
 * .get_num_messages()               - returns the number of messages
 * .get_messages(start, end)         - returns a slice of messages
+* .get_messages()
 * .up_on_occupied_rows(len_str)
 * .up_on_message(number)
 * .up_on_rows(number)
 * .get_senders()                    - returns a list of dictionaries
+* .get_skips()
 
 ## Installation
 Repository cloning
