@@ -23,6 +23,7 @@ class print_chat:
             self._clear_screen()
 
     def up_on_rows(self, number):
+        print('\r' + ' ' * os.get_terminal_size().columns + '\r', end='')
         print(('\x1b[A\r' + ' ' * os.get_terminal_size().columns + '\r') * number, end='')
 
     def up_on_message(self, number):
@@ -35,15 +36,17 @@ class print_chat:
 
     def down_on_rows(self, number):
         print('\r' + ' ' * os.get_terminal_size().columns + '\r', end='')
-        print(('\n\r' + ' ' * os.get_terminal_size().columns + '\r') * (number-1), end='')
+        print(('\n\r' + ' ' * os.get_terminal_size().columns + '\r') * number, end='')
 
     def get_num_messages(self):
         return(len(self.MESSAGES))
 
-    def get_messages(self, start, end):
-        s = len(self.MESSAGES) - end + 1
-        e = len(self.MESSAGES) - start + 1
-        return self.MESSAGES[s:e]
+    def get_messages_from(self, sender):
+        out = []
+        for i in self.MESSAGES:
+            if i['sender'] == sender:
+                out.append(i)
+        return out
 
     def get_messages(self):
         return self.MESSAGES
@@ -115,9 +118,6 @@ class print_chat:
             file.write(str + '[' + dt + '] [' + sender + ']' + ': ' + text + '\n')
 
     def add_skip(self, text):
-
-        #text = str(text)
-
         lines = ((len(str(text))-1) // os.get_terminal_size().columns) + 1
 
         if not self.skips:
@@ -128,6 +128,13 @@ class print_chat:
             else:
                 self.skips[len(self.skips)-1].append(text)
         print(text)
+
+    def remove_skip(self, number):
+        if number > 0 and number <= (len(self.skips)):
+            n = len(self.skips) - number
+            self.up_on_message(number)
+            self.skips[n].clear()
+            self.load(number)
 
     def edit_skip(self, number, text):
         if number > 0 and number <= (len(self.skips)):
@@ -145,11 +152,7 @@ class print_chat:
     def reload(self, number):
         if number > 0 and number <= len(self.MESSAGES):
             self.up_on_message(number)
-            i = len(self.skips) - number
-            for m in self.MESSAGES[len(self.MESSAGES)-number:len(self.MESSAGES)]:
-                self.__print_mess(m['sender'], m['message'])
-                self.print_skip(i)
-                i += 1
+            self.load(number)
 
     def load(self, number):
         if number > 0 and number <= len(self.MESSAGES):
