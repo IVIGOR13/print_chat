@@ -21,7 +21,7 @@ while True:
 
 pc.close()
 ```
-# or for functional testing:
+# or for testing the main functionality:
 ```python
 from print_chat1 import print_chat
 
