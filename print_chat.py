@@ -178,12 +178,13 @@ class print_chat:
             self.load(number)
 
     def add_message(self, sender, text):
+        text = " ".join(str(text).split())
+
         if text != '':
 
             if not self.skips:
                 self.skips.append([])
 
-            text = " ".join(str(text).split())
             self.MESSAGES.append({'id': self.id_message, 'sender': sender, 'message': text})
             self.id_message += 1
             self.__print_mess(sender, text)
