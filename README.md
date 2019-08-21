@@ -21,6 +21,41 @@ while True:
 
 pc.close()
 ```
+# or for functional testing:
+```python
+from print_chat1 import print_chat
+
+pc = print_chat()
+
+sender = 'Charls'
+pc.set_colors([('Charls', 'green')])
+
+while True:
+    post = str(input('> '))
+    pc.up_on_occupied_rows(len(post) + len(sender) + 2)
+    command = post.split(' ')
+
+    if post == 'exit':
+        break
+    elif command[0] == 'remove':
+        pc.remove(int(command[1]))
+    elif command[0] == 'edit':
+        pc.edit(int(command[1]), str(command[2]))
+    elif command[0] == 'reload':
+        pc.reload(int(command[1]))
+    elif command[0] == 'load':
+        pc.load(int(command[1]))
+    elif command[0] == 'add_skip':
+        pc.add_skip(str(command[1]))
+    elif command[0] == 'edit_skip':
+        pc.edit_skip(int(command[1]), str(command[2]))
+    elif command[0] == 'remove_skip':
+        pc.remove_skip(int(command[1]))
+    else:
+        pc.add_message('Charls', post)
+
+pc.close()
+```
 
 ## Important
 ### Numbering starts at 1, at the end of the message list
