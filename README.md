@@ -63,10 +63,11 @@ pc.close()
 ## Create object
 default:
 ```python
-pc = print_chat(clr=True, file_name='')
+pc = print_chat(clr=True, file_name='', time=False)
 ```
 * clr - clear or not screen before output
 * file_name - the name of the message history file, if not specified, the file is not created
+* time - show message sending time
 
 ## Method list
 * .add_message(sender, text)
