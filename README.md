@@ -23,7 +23,7 @@ pc.close()
 ```
 # or for testing the main functionality:
 ```python
-from print_chat1 import print_chat
+from print_chat import print_chat
 
 pc = print_chat()
 
