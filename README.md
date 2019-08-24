@@ -25,14 +25,16 @@ pc.close()
 ```python
 from print_chat import print_chat
 
-pc = print_chat()
+pc = print_chat(time=True)
 
-sender = 'Charls'
-pc.set_colors([('Charls', 'green')])
+s = 0
+senders = ['Charls', 'Max', 'Karl']
+pc.set_colors([(senders[0], 'green'), (senders[1], 'red'), (senders[2], 'yellow')])
+pc.add_skip('-Test chat-\n-----------')
 
 while True:
     post = str(input('> '))
-    pc.up_on_occupied_rows(len(post) + len(sender) + 2)
+    pc.up_on_occupied_rows(len(post) + len(senders[s]) + 2)
     command = post.split(' ')
 
     if post == 'exit':
@@ -51,8 +53,12 @@ while True:
         pc.edit_skip(int(command[1]), str(command[2]))
     elif command[0] == 'remove_skip':
         pc.remove_skip(int(command[1]))
+    elif command[0] == 'change_sender':
+        s = (s+1) % len(senders)
     else:
-        pc.add_message('Charls', post)
+        pc.add_message(senders[s], post)
+
+print(pc.get_messages())
 
 pc.close()
 ```
