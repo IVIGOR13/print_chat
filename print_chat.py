@@ -81,6 +81,10 @@ class print_chat:
                 self.id_sender += 1
 
 
+    def get_time(self):
+        return time.strftime("%H:%M", time.gmtime())
+
+
     def __get_lines(self, number):
         lines = 0
         for i in range(number):
@@ -101,10 +105,9 @@ class print_chat:
         return lines
 
 
-    def __print_mess(self, sender, text):
-        a = ''
+    def __print_mess(self, sender, text, time):
         if self.is_time:
-            a = '[{}] '.format(time.strftime("%H:%M", time.gmtime()))
+            print('[{}] '.format(time), end='')
 
         for i in self.senders:
             if not i['sender'] == sender:
@@ -113,7 +116,7 @@ class print_chat:
                 c0, c1 = 'grey', i['color']
                 break
 
-        print(a + colored('[' + sender + ']', c0, ('on_' + c1)) + ': ', end='')
+        print(colored('[' + sender + ']', c0, ('on_' + c1)) + ': ', end='')
         print(text, end='\n')
 
         if self.is_save_file:
@@ -176,7 +179,7 @@ class print_chat:
         if number > 0 and number <= len(self.MESSAGES):
             i = len(self.skips) - number
             for m in self.MESSAGES[len(self.MESSAGES)-number:len(self.MESSAGES)]:
-                self.__print_mess(m['sender'], m['message'])
+                self.__print_mess(m['sender'], m['message'], m['time'])
                 self.print_skip(i)
                 i += 1
 
@@ -194,7 +197,7 @@ class print_chat:
         if number > 0 and number <= len(self.MESSAGES):
             n = len(self.MESSAGES) - number
             self.up_on_message(number)
-            self.MESSAGES[n].update({'sender': self.MESSAGES[n]['sender'], 'message': text})
+            self.MESSAGES[n].update({'message': text})
             self.load(number)
 
 
@@ -206,9 +209,10 @@ class print_chat:
             if not self.skips:
                 self.skips.append([])
 
-            self.MESSAGES.append({'id': self.id_message, 'sender': sender, 'message': text})
+            time = self.get_time()
+            self.MESSAGES.append({'id': self.id_message, 'sender': sender, 'message': text, 'time': time})
             self.id_message += 1
-            self.__print_mess(sender, text)
+            self.__print_mess(sender, text, time)
 
             self.skips.append([])
 
