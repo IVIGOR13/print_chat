@@ -1,7 +1,7 @@
 # print_chat
 Small print tool for implementing chat in the terminal.
 
-![The Catcher in the Rye chat](https://github.com/IVIGOR13/print_chat/blob/master/screen_chat.png)
+![The Catcher in the Rye chat](https://github.com/IVIGOR13/print_chat/blob/master/screen_chat_in_the_rye.png)
 
 ## Usage example
 ```python
