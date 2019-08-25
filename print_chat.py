@@ -77,7 +77,10 @@ class print_chat:
                     found = True
 
             if not found:
-                self.senders.append({'id': self.id_sender, 'sender': color[0], 'color': color[1]})
+                if len(color) == 1:
+                    self.senders.append({'id': self.id_sender, 'sender': color[0], 'color': 'grey'})
+                else:
+                    self.senders.append({'id': self.id_sender, 'sender': color[0], 'color': color[1]})
                 self.id_sender += 1
 
 
@@ -113,7 +116,11 @@ class print_chat:
             if not i['sender'] == sender:
                 c0, c1 = 'white', 'grey'
             else:
-                c0, c1 = 'grey', i['color']
+                c = i['color']
+                if c == 'grey':
+                    c0, c1 = 'white', 'grey'
+                else:
+                    c0, c1 = 'grey', c
                 break
 
         print(colored('[' + sender + ']', c0, ('on_' + c1)) + ': ', end='')
