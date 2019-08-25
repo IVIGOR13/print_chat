@@ -27,38 +27,26 @@ from print_chat import print_chat
 
 pc = print_chat(time=True)
 
-s = 0
+s = 0 # sender iterator
 senders = ['Charls', 'Max', 'Karl']
 pc.set_colors([(senders[0], 'green'), (senders[1], 'red'), (senders[2], 'yellow')])
-pc.add_skip('-Test chat-\n-----------')
+pc.add_skip('-Test chat-\n-----------') # adding a header to the dialog
 
 while True:
     post = str(input('> '))
     pc.up_on_occupied_rows(len(post) + len(senders[s]) + 2)
     command = post.split(' ')
 
-    if post == 'exit':
-        break
-    elif command[0] == 'remove':
-        pc.remove(int(command[1]))
-    elif command[0] == 'edit':
-        pc.edit(int(command[1]), str(command[2]))
-    elif command[0] == 'reload':
-        pc.reload(int(command[1]))
-    elif command[0] == 'load':
-        pc.load(int(command[1]))
-    elif command[0] == 'add_skip':
-        pc.add_skip(str(command[1]))
-    elif command[0] == 'edit_skip':
-        pc.edit_skip(int(command[1]), str(command[2]))
-    elif command[0] == 'remove_skip':
-        pc.remove_skip(int(command[1]))
-    elif command[0] == 'change_sender':
-        s = (s+1) % len(senders)
-    else:
-        pc.add_message(senders[s], post)
-
-print(pc.get_messages())
+    if post == 'exit':                  break
+    elif command[0] == 'remove':        pc.remove(int(command[1]))
+    elif command[0] == 'edit':          pc.edit(int(command[1]), str(command[2]))
+    elif command[0] == 'reload':        pc.reload(int(command[1]))
+    elif command[0] == 'load':          pc.load(int(command[1]))
+    elif command[0] == 'add_skip':      pc.add_skip(str(command[1]))
+    elif command[0] == 'edit_skip':     pc.edit_skip(int(command[1]), str(command[2]))
+    elif command[0] == 'remove_skip':   pc.remove_skip(int(command[1]))
+    elif command[0] == 'cs': s = (s+1) % len(senders) # change sender to next
+    else:                               pc.add_message(senders[s], post)
 
 pc.close()
 ```
