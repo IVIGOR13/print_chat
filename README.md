@@ -40,12 +40,12 @@ while True:
     command = post.split(' ')
 
     if post == 'exit':                  break
-    elif command[0] == 'remove':        pc.remove(int(command[1]))
-    elif command[0] == 'edit':          pc.edit(int(command[1]), str(command[2]))
+    elif command[0] == 'remove':        pc.remove(int(command[1])) # {command} {number}
+    elif command[0] == 'edit':          pc.edit(int(command[1]), ' '.join(command[2:])) # {command} {number} {text}
     elif command[0] == 'reload':        pc.reload(int(command[1]))
     elif command[0] == 'load':          pc.load(int(command[1]))
     elif command[0] == 'add_skip':      pc.add_skip(str(command[1]))
-    elif command[0] == 'edit_skip':     pc.edit_skip(int(command[1]), str(command[2]))
+    elif command[0] == 'edit_skip':     pc.edit_skip(int(command[1]), ' '.join(command[2:]))
     elif command[0] == 'remove_skip':   pc.remove_skip(int(command[1]))
     elif command[0] == 'cs': s = (s+1) % len(senders) # change sender to next
     else:                               pc.add_message(senders[s], post)
