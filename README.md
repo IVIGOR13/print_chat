@@ -40,8 +40,8 @@ while True:
     command = post.split(' ')
 
     if post == 'exit':                  break
-    elif command[0] == 'remove':        pc.remove(int(command[1])) # {command} {number}
-    elif command[0] == 'edit':          pc.edit(int(command[1]), ' '.join(command[2:])) # {command} {number} {text}
+    elif command[0] == 'remove':        pc.remove(int(command[1]))
+    elif command[0] == 'edit':          pc.edit(int(command[1]), ' '.join(command[2:]))
     elif command[0] == 'reload':        pc.reload(int(command[1]))
     elif command[0] == 'load':          pc.load(int(command[1]))
     elif command[0] == 'add_skip':      pc.add_skip(str(command[1]))
