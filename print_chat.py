@@ -241,7 +241,7 @@ class print_chat:
             return self.id_message-1
 
 
-    def __init__(self, clr=True, file_name='', time=False):
+    def __init__(self, file_name='', time=False):
 
         self.MESSAGES = []
         self.senders = []
@@ -262,5 +262,4 @@ class print_chat:
         else:
             self.is_save_file = False
 
-        if clr:
-            self._clear_screen()
+        self._clear_screen()
