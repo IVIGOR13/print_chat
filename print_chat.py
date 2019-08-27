@@ -97,6 +97,7 @@ class print_chat:
 
             s = 0
             for j in self.skips[(len(self.skips)-1) - i]:
+                j = str(j)
                 if isinstance(j, str):
                     for k in j.split('\n'):
                         s += ((len(k)-1) // os.get_terminal_size().columns) + 1
@@ -154,19 +155,33 @@ class print_chat:
 
 
     def remove_skip(self, number):
-        if number > 0 and number <= (len(self.skips)):
+        if number > 0 and number <= len(self.skips):
             n = len(self.skips) - number
             self.up_on_message(number)
             self.skips[n].clear()
-            self.load(number)
+            if number == len(self.skips):
+                self._load(number-1)
+            else:
+                self._load(number)
 
 
     def edit_skip(self, number, text):
-        if number > 0 and number <= (len(self.skips)):
+        if number > 0 and number <= len(self.skips):
             n = len(self.skips) - number
             self.up_on_message(number)
             self.skips[n] = [text]
-            self.load(number)
+            if number == len(self.skips):
+                self._load(number-1)
+            else:
+                self._load(number)
+
+
+    def load_in_skip(self, number):
+        if number > 0 and number <= len(self.MESSAGES):
+            i = number
+            for m in self.MESSAGES[len(self.MESSAGES)-number:len(self.MESSAGES)]:
+                self.add_skip(self.MESSAGES[len(self.MESSAGES)-i]['message'])
+                i -= 1
 
 
     def print_skip(self, number):
@@ -179,10 +194,10 @@ class print_chat:
     def reload(self, number):
         if number > 0 and number <= len(self.MESSAGES):
             self.up_on_message(number)
-            self.load(number)
+            self._load(number)
 
 
-    def load(self, number):
+    def _load(self, number):
         if number > 0 and number <= len(self.MESSAGES):
             i = len(self.skips) - number
             for m in self.MESSAGES[len(self.MESSAGES)-number:len(self.MESSAGES)]:
@@ -194,7 +209,7 @@ class print_chat:
     def remove(self, number):
         if number > 0 and number <= len(self.MESSAGES):
             self.up_on_message(number)
-            self.load(number-1)
+            self._load(number-1)
 
             self.MESSAGES.pop(len(self.MESSAGES) - number)
             self.skips.pop(len(self.skips) - number)
@@ -205,7 +220,7 @@ class print_chat:
             n = len(self.MESSAGES) - number
             self.up_on_message(number)
             self.MESSAGES[n].update({'message': text})
-            self.load(number)
+            self._load(number)
 
 
     def add_message(self, sender, text):
