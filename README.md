@@ -31,7 +31,11 @@ pc = print_chat(time=True)
 
 s = 0 # sender iterator
 senders = ['Charls', 'Max', 'Karl']
-pc.set_colors([(senders[0], 'green'), (senders[1], 'red'), (senders[2], 'yellow')])
+pc.set_colors([
+        (senders[0], 'green'),
+        (senders[1], 'red'),
+        (senders[2], 'yellow')
+    ])
 pc.add_skip('-Test chat-\n-----------') # adding a header to the dialog
 
 while True:
@@ -43,7 +47,7 @@ while True:
     elif command[0] == 'remove':        pc.remove(int(command[1]))
     elif command[0] == 'edit':          pc.edit(int(command[1]), ' '.join(command[2:]))
     elif command[0] == 'reload':        pc.reload(int(command[1]))
-    elif command[0] == 'load':          pc.load(int(command[1]))
+    elif command[0] == 'load':          pc.load_in_skip(int(command[1]))
     elif command[0] == 'add_skip':      pc.add_skip(str(command[1]))
     elif command[0] == 'edit_skip':     pc.edit_skip(int(command[1]), ' '.join(command[2:]))
     elif command[0] == 'remove_skip':   pc.remove_skip(int(command[1]))
@@ -59,9 +63,8 @@ pc.close()
 ## Create object
 default:
 ```python
-pc = print_chat(clr=True, file_name='', time=False)
+pc = print_chat(file_name='', time=False)
 ```
-* clr - clear or not screen before output
 * file_name - the name of the message history file, if not specified, the file is not created
 * time - show message sending time
 
