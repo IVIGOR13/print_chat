@@ -94,6 +94,7 @@ pc = print_chat(file_name='', time=False)
 * .up_on_occupied_rows(len_str)
 * .up_on_message(number)
 * .up_on_rows(number)
+* .clear_row()
 * .get_senders()                    - returns a list of dictionaries
 * .get_skips()
 
