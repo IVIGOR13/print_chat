@@ -34,6 +34,10 @@ class print_chat:
         self.up_on_rows(n)
 
 
+    def clear_row(self):
+        print('\r' + ' ' * os.get_terminal_size().columns + '\r', end='')
+
+
     def up_on_occupied_rows(self, len_str):
         lines = ((len_str-1) // os.get_terminal_size().columns) + 1
         self.up_on_rows(lines)
@@ -78,9 +82,17 @@ class print_chat:
 
             if not found:
                 if len(color) == 1:
-                    self.senders.append({'id': self.id_sender, 'sender': color[0], 'color': 'grey'})
+                    self.senders.append({
+                            'id': self.id_sender,
+                            'sender': color[0],
+                            'color': 'grey'
+                        })
                 else:
-                    self.senders.append({'id': self.id_sender, 'sender': color[0], 'color': color[1]})
+                    self.senders.append({
+                            'id': self.id_sender,
+                            'sender': color[0],
+                            'color': color[1]
+                        })
                 self.id_sender += 1
 
 
@@ -112,6 +124,8 @@ class print_chat:
     def __print_mess(self, sender, text, time):
         if self.is_time:
             print('[{}] '.format(time), end='')
+
+        c0, c1 = '', ''
 
         for i in self.senders:
             if not i['sender'] == sender:
@@ -219,7 +233,9 @@ class print_chat:
         if number > 0 and number <= len(self.MESSAGES):
             n = len(self.MESSAGES) - number
             self.up_on_message(number)
-            self.MESSAGES[n].update({'message': text})
+            self.MESSAGES[n].update({
+                    'message': text
+                })
             self._load(number)
 
 
@@ -232,7 +248,12 @@ class print_chat:
                 self.skips.append([])
 
             time = self.get_time()
-            self.MESSAGES.append({'id': self.id_message, 'sender': sender, 'message': text, 'time': time})
+            self.MESSAGES.append({
+                    'id': self.id_message,
+                    'sender': sender,
+                    'message': text,
+                    'time': time
+                })
             self.id_message += 1
             self.__print_mess(sender, text, time)
 
@@ -241,7 +262,7 @@ class print_chat:
             return self.id_message-1
 
 
-    def __init__(self, file_name='', time=False):
+    def __init__(self, clr=True, file_name='', time=False):
 
         self.MESSAGES = []
         self.senders = []
@@ -262,4 +283,5 @@ class print_chat:
         else:
             self.is_save_file = False
 
-        self._clear_screen()
+        if clr:
+            self._clear_screen()
