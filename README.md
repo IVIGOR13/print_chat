@@ -5,12 +5,12 @@ Small print tool for implementing chat in the terminal.
 
 ## Usage example
 ```python
-from print_chat import print_chat
+import print_chat as pc
 
-pc = print_chat()
+pct = pc.print_chat()
 
 sender = 'Charls'
-pc.set_colors([('Charls', 'green')])
+pct.set_colors([('Charls', 'green')])
 
 while True:
     post = str(input('> '))
@@ -18,43 +18,43 @@ while True:
     if post == 'exit':
         break
     else:
-        pc.up_on_occupied_rows(len(post) + len(sender) + 2)
-        pc.add_message('Charls', post)
+        pct.up_on_occupied_rows(len(post) + len(sender) + 2)
+        pct.add_message('Charls', post)
 
-pc.close()
+pct.close()
 ```
 # or for testing the main functionality:
 ```python
-from print_chat import print_chat
+import print_chat as pc
 
-pc = print_chat(time=True)
+pct = pc.print_chat(time=True)
 
 s = 0 # sender iterator
 senders = ['Charls', 'Max', 'Karl']
-pc.set_colors([
+pct.set_colors([
         (senders[0], 'green'),
         (senders[1], 'red'),
         (senders[2], 'yellow')
     ])
-pc.add_skip('-Test chat-\n-----------') # adding a header to the dialog
+pct.add_skip('-Test chat-\n-----------') # adding a header to the dialog
 
 while True:
     post = str(input('> '))
-    pc.up_on_occupied_rows(len(post) + len(senders[s]) + 2)
+    pct.up_on_occupied_rows(len(post) + len(senders[s]) + 2)
     command = post.split(' ')
 
     if post == 'exit':                  break
-    elif command[0] == 'remove':        pc.remove(int(command[1]))
-    elif command[0] == 'edit':          pc.edit(int(command[1]), ' '.join(command[2:]))
-    elif command[0] == 'reload':        pc.reload(int(command[1]))
-    elif command[0] == 'load':          pc.load_in_skip(int(command[1]))
-    elif command[0] == 'add_skip':      pc.add_skip(str(command[1]))
-    elif command[0] == 'edit_skip':     pc.edit_skip(int(command[1]), ' '.join(command[2:]))
-    elif command[0] == 'remove_skip':   pc.remove_skip(int(command[1]))
+    elif command[0] == 'remove':        pct.remove(int(command[1]))
+    elif command[0] == 'edit':          pct.edit(int(command[1]), ' '.join(command[2:]))
+    elif command[0] == 'reload':        pct.reload(int(command[1]))
+    elif command[0] == 'load':          pct.load_in_skip(int(command[1]))
+    elif command[0] == 'add_skip':      pct.add_skip(str(command[1]))
+    elif command[0] == 'edit_skip':     pct.edit_skip(int(command[1]), ' '.join(command[2:]))
+    elif command[0] == 'remove_skip':   pct.remove_skip(int(command[1]))
     elif command[0] == 'cs': s = (s+1) % len(senders) # change sender to next
-    else:                               pc.add_message(senders[s], post)
+    else:                               pct.add_message(senders[s], post)
 
-pc.close()
+pct.close()
 ```
 
 ## Important
@@ -63,7 +63,7 @@ pc.close()
 ## Create object
 default:
 ```python
-pc = print_chat(file_name='', time=False)
+pct = print_chat.print_chat(file_name='', time=False)
 ```
 * file_name - the name of the message history file, if not specified, the file is not created
 * time - show message sending time
