@@ -23,7 +23,7 @@ while True:
 
 pct.close()
 ```
-# or for testing the main functionality:
+### or for testing the main functionality:
 ```python
 import print_chat as pc
 
