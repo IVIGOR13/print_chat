@@ -63,9 +63,8 @@ pct.close()
 ## Create object
 default:
 ```python
-pct = print_chat.print_chat(file_name='', time=False)
+pct = print_chat.print_chat(time=False)
 ```
-* file_name - the name of the message history file, if not specified, the file is not created
 * time - show message sending time
 
 ## Method list
