@@ -125,12 +125,10 @@ class print_chat:
             print('[{}] '.format(time), end='')
 
         # color selection for printing sender name
-        c0, c1 = '', ''
+        c0, c1 = 'white', 'grey'
 
         for i in self.senders:
-            if not i['sender'] == sender:
-                c0, c1 = 'white', 'grey'
-            else:
+            if i['sender'] == sender:
                 c = i['color']
                 if c == 'grey':
                     c0, c1 = 'white', 'grey'
