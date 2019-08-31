@@ -9,23 +9,22 @@ import colorama
 
 colorama.init()
 
+"""
+Small print tool for implementing chat in the terminal
+"""
+
 class print_chat:
 
     def _clear_screen(self):
         os.system('cls' if os.name == 'nt' else 'clear')
 
 
-    def close(self, clr=False):
-        self.MESSAGES.clear()
-        self.senders.clear()
-        self.skips.clear()
-        print('\x1b[A\r', end='')
-        if clr:
-            self._clear_screen()
+    def clear_row(self):
+        print('\r' + ' ' * os.get_terminal_size().columns + '\r', end='')
 
 
     def up_on_rows(self, number):
-        print('\r' + ' ' * os.get_terminal_size().columns + '\r', end='')
+        self.clear_row
         print(('\x1b[A\r' + ' ' * os.get_terminal_size().columns + '\r') * number, end='')
 
 
@@ -34,17 +33,13 @@ class print_chat:
         self.up_on_rows(n)
 
 
-    def clear_row(self):
-        print('\r' + ' ' * os.get_terminal_size().columns + '\r', end='')
-
-
     def up_on_occupied_rows(self, len_str):
         lines = ((len_str-1) // os.get_terminal_size().columns) + 1
         self.up_on_rows(lines)
 
 
     def down_on_rows(self, number):
-        print('\r' + ' ' * os.get_terminal_size().columns + '\r', end='')
+        self.clear_row()
         print(('\n\r' + ' ' * os.get_terminal_size().columns + '\r') * number, end='')
 
 
@@ -85,13 +80,13 @@ class print_chat:
                     self.senders.append({
                             'id': self.id_sender,
                             'sender': color[0],
-                            'color': 'grey'
+                            'color': 'grey',
                         })
                 else:
                     self.senders.append({
                             'id': self.id_sender,
                             'sender': color[0],
-                            'color': color[1]
+                            'color': color[1],
                         })
                 self.id_sender += 1
 
@@ -100,13 +95,16 @@ class print_chat:
         return time.strftime("%H:%M", time.gmtime())
 
 
+    # returns the number of lines that must be passed to move the cursor to the specified message
     def __get_lines(self, number):
         lines = 0
         for i in range(number):
 
+            # counting the number of lines occupied by a message
             m = self.MESSAGES[(len(self.MESSAGES)-1) - i]
             l = (len(m['sender']) + len(m['message']) + self.len_frame)
 
+            # count the number of lines occupied by a skip
             s = 0
             for j in self.skips[(len(self.skips)-1) - i]:
                 j = str(j)
@@ -122,9 +120,11 @@ class print_chat:
 
 
     def __print_mess(self, sender, text, time):
+
         if self.is_time:
             print('[{}] '.format(time), end='')
 
+        # color selection for printing sender name
         c0, c1 = '', ''
 
         for i in self.senders:
@@ -141,20 +141,8 @@ class print_chat:
         print(colored('[' + sender + ']', c0, ('on_' + c1)) + ': ', end='')
         print(text, end='\n')
 
-        if self.is_save_file:
-            dt = time.strftime("%d.%m %H:%M", time.gmtime())
-            str = ''
-            try:
-                file = open(self.file_name, 'r')
-                str = file.read()
-                file.close()
-                file = open(self.file_name, 'w')
-            except IOError:
-                file = open(self.file_name, 'w')
 
-            file.write(str + '[' + dt + '] [' + sender + ']' + ': ' + text + '\n')
-
-
+    # adds a pass between messages
     def add_skip(self, text):
         lines = ((len(str(text))-1) // os.get_terminal_size().columns) + 1
 
@@ -190,14 +178,6 @@ class print_chat:
                 self._load(number)
 
 
-    def load_in_skip(self, number):
-        if number > 0 and number <= len(self.MESSAGES):
-            i = number
-            for m in self.MESSAGES[len(self.MESSAGES)-number:len(self.MESSAGES)]:
-                self.add_skip(self.MESSAGES[len(self.MESSAGES)-i]['message'])
-                i -= 1
-
-
     def print_skip(self, number):
         if number > 0 and number <= len(self.skips):
             if len(self.skips[number]) != 0:
@@ -205,6 +185,7 @@ class print_chat:
                     print(i)
 
 
+    # reprints the specified number of messages
     def reload(self, number):
         if number > 0 and number <= len(self.MESSAGES):
             self.up_on_message(number)
@@ -240,6 +221,7 @@ class print_chat:
 
 
     def add_message(self, sender, text):
+
         text = " ".join(str(text).split())
 
         if text != '':
@@ -254,7 +236,9 @@ class print_chat:
                     'message': text,
                     'time': time
                 })
+
             self.id_message += 1
+
             self.__print_mess(sender, text, time)
 
             self.skips.append([])
@@ -262,7 +246,16 @@ class print_chat:
             return self.id_message-1
 
 
-    def __init__(self, clr=True, file_name='', time=False):
+    def close(self, clr=False):
+        self.MESSAGES.clear()
+        self.senders.clear()
+        self.skips.clear()
+        print('\x1b[A\r', end='')
+        if clr:
+            self._clear_screen()
+
+
+    def __init__(self, time=False):
 
         self.MESSAGES = []
         self.senders = []
@@ -273,15 +266,8 @@ class print_chat:
 
         self.is_time = time
         if self.is_time:
-            self.len_frame = 12
+            self.len_frame = 4 + 8
         else:
             self.len_frame = 4
 
-        self.file_name = file_name
-        if file_name != '':
-            self.is_save_file = True
-        else:
-            self.is_save_file = False
-
-        if clr:
-            self._clear_screen()
+        self._clear_screen()
