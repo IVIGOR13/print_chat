@@ -47,13 +47,17 @@ while True:
     elif command[0] == 'remove':        pct.remove(int(command[1]))
     elif command[0] == 'edit':          pct.edit(int(command[1]), ' '.join(command[2:]))
     elif command[0] == 'reload':        pct.reload(int(command[1]))
-    elif command[0] == 'add_skip':      pct.add_skip(str(command[1]))
+    elif command[0] == 'add_skip':      pct.add_skip(str(' '.join(command[1:])))
     elif command[0] == 'edit_skip':     pct.edit_skip(int(command[1]), ' '.join(command[2:]))
     elif command[0] == 'remove_skip':   pct.remove_skip(int(command[1]))
-    elif command[0] == 'cs': s = (s+1) % len(senders) # change sender to next
+    elif command[0] == 'add_mark':      pct.add_mark(int(command[1]), str(command[2]))
+    elif command[0] == 'edit_mark':     pct.edit_mark(int(command[1]), str(command[2]))
+    elif command[0] == 'remove_mark':   pct.remove_mark(int(command[1]))
+    elif post == 'cs':                  s = (s+1) % len(senders) # change sender to next
     else:                               pct.add_message(senders[s], post)
 
 pct.close()
+
 ```
 
 ## Important
@@ -74,6 +78,9 @@ pct = print_chat.print_chat(time=False)
 * .add_skip(text) 
 * .edit_skip(number, text)
 * .remove_skip(number)
+* .add_mark(number, text)
+* .edit_mark(number, text)
+* .remove_mark(number)
 * .close(clr)                       - closes the dialog, with or without screen clearing
 * .set_colors(colors)               - takes a list [[sender, color],..]
    colors list:
