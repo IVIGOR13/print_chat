@@ -140,19 +140,27 @@ class print_chat:
         print('{}{}'.format(text, ''.join(mark)), end='\n')
 
 
-    def add_mark(self, number, mark):
-        n = len(self.MESSAGES) - number
-        self.up_on_message(number)
-        m = self.MESSAGES[n]['mark']
+    def add_mark(self, mark):
+        self.up_on_message(1)
+        m = self.MESSAGES[len(self.MESSAGES)-1]['mark']
         if not m:
-            self.MESSAGES[n].update({
+            self.MESSAGES[len(self.MESSAGES)-1].update({
                     'mark': [str(mark)]
                 })
         else:
             m.append(str(mark))
-            self.MESSAGES[n].update({
+            self.MESSAGES[len(self.MESSAGES)-1].update({
                     'mark': m
                 })
+        self._load(1)
+
+
+    def edit_mark(self, number, mark):
+        n = len(self.MESSAGES) - number
+        self.up_on_message(number)
+        self.MESSAGES[n].update({
+                'mark': [str(mark)]
+            })
         self._load(number)
 
 
@@ -161,15 +169,6 @@ class print_chat:
         self.up_on_message(number)
         self.MESSAGES[n].update({
                 'mark': []
-            })
-        self._load(number)
-
-
-    def edit_mark(self, number, mark):
-        n = len(self.MESSAGES) - number
-        self.up_on_message(number)
-        self.MESSAGES[n].update({
-                'mark': [str(mark)]
             })
         self._load(number)
 
