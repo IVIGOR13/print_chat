@@ -78,7 +78,7 @@ pct = print_chat.print_chat(time=False)
 * .add_skip(text) 
 * .edit_skip(number, text)
 * .remove_skip(number)
-* .add_mark(number, text)
+* .add_mark(text)
 * .edit_mark(number, text)
 * .remove_mark(number)
 * .close(clr)                       - closes the dialog, with or without screen clearing
