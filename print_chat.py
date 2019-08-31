@@ -102,7 +102,7 @@ class print_chat:
 
             # counting the number of lines occupied by a message
             m = self.MESSAGES[(len(self.MESSAGES)-1) - i]
-            l = (len(m['sender']) + len(m['message']) + self.len_frame)
+            l = (len(m['sender']) + len(m['message']) + len(m['mark']) + self.len_frame)
 
             # count the number of lines occupied by a skip
             s = 0
@@ -119,7 +119,7 @@ class print_chat:
         return lines
 
 
-    def __print_mess(self, sender, text, time):
+    def __print_mess(self, sender, text, time, mark):
 
         if self.is_time:
             print('[{}] '.format(time), end='')
@@ -137,7 +137,41 @@ class print_chat:
                 break
 
         print(colored('[' + sender + ']', c0, ('on_' + c1)) + ': ', end='')
-        print(text, end='\n')
+        print('{}{}'.format(text, ''.join(mark)), end='\n')
+
+
+    def add_mark(self, number, mark):
+        n = len(self.MESSAGES) - number
+        self.up_on_message(number)
+        m = self.MESSAGES[n]['mark']
+        if not m:
+            self.MESSAGES[n].update({
+                    'mark': [str(mark)]
+                })
+        else:
+            m.append(str(mark))
+            self.MESSAGES[n].update({
+                    'mark': m
+                })
+        self._load(number)
+
+
+    def remove_mark(self, number):
+        n = len(self.MESSAGES) - number
+        self.up_on_message(number)
+        self.MESSAGES[n].update({
+                'mark': []
+            })
+        self._load(number)
+
+
+    def edit_mark(self, number, mark):
+        n = len(self.MESSAGES) - number
+        self.up_on_message(number)
+        self.MESSAGES[n].update({
+                'mark': [str(mark)]
+            })
+        self._load(number)
 
 
     # adds a pass between messages
@@ -151,7 +185,10 @@ class print_chat:
                 self.skips[len(self.skips)-1].append(text)
             else:
                 self.skips[len(self.skips)-1].append(text)
-        print(text)
+        if not self.MESSAGES:
+            print(text)
+        else:
+            print(' ' * 8 + text)
 
 
     def remove_skip(self, number):
@@ -179,8 +216,8 @@ class print_chat:
     def print_skip(self, number):
         if number > 0 and number <= len(self.skips):
             if len(self.skips[number]) != 0:
-                for i in self.skips[number]:
-                    print(i)
+                for line in self.skips[number]:
+                    print(' ' * 8 + line)
 
 
     # reprints the specified number of messages
@@ -194,7 +231,7 @@ class print_chat:
         if number > 0 and number <= len(self.MESSAGES):
             i = len(self.skips) - number
             for m in self.MESSAGES[len(self.MESSAGES)-number:len(self.MESSAGES)]:
-                self.__print_mess(m['sender'], m['message'], m['time'])
+                self.__print_mess(m['sender'], m['message'], m['time'], m['mark'])
                 self.print_skip(i)
                 i += 1
 
@@ -218,7 +255,7 @@ class print_chat:
             self._load(number)
 
 
-    def add_message(self, sender, text):
+    def add_message(self, sender, text, mark=[]):
 
         text = " ".join(str(text).split())
 
@@ -232,12 +269,13 @@ class print_chat:
                     'id': self.id_message,
                     'sender': sender,
                     'message': text,
-                    'time': time
+                    'time': time,
+                    'mark': mark,
                 })
 
             self.id_message += 1
 
-            self.__print_mess(sender, text, time)
+            self.__print_mess(sender, text, time, mark)
 
             self.skips.append([])
 
