@@ -45,7 +45,7 @@ while True:
     elif command[0] == 'remove':        pct.remove(int(command[1]))
     elif command[0] == 'edit':          pct.edit(int(command[1]), ' '.join(command[2:]))
     elif command[0] == 'reload':        pct.reload(int(command[1]))
-    elif command[0] == 'add_skip':      pct.add_skip(str(' '.join(command[1:])))
+    elif command[0] == 'add_skip':      pct.add_skip(int(command[1]), str(' '.join(command[2:])))
     elif command[0] == 'edit_skip':     pct.edit_skip(int(command[1]), ' '.join(command[2:]))
     elif command[0] == 'remove_skip':   pct.remove_skip(int(command[1]))
     elif command[0] == 'add_mark':      pct.add_mark(int(command[1]), str(command[2]))
@@ -69,14 +69,15 @@ pct = print_chat.print_chat(time=False)
 * time - show message sending time
 
 ## Method list
-* .add_message(sender, text)
+* .add_message(sender, text, time='', skip=[], mark=[])
+* .add_message_top(sender, text, time='', skip=[], mark=[], prnt=True)
 * .reload(number)
 * .remove(number)
 * .edit(number, text)
-* .add_skip(text) 
+* .add_skip(number, text) 
 * .edit_skip(number, text)
 * .remove_skip(number)
-* .add_mark(text)
+* .add_mark(number, text)
 * .edit_mark(number, text)
 * .remove_mark(number)
 * .close(clr)                       - closes the dialog, with or without screen clearing
@@ -97,8 +98,8 @@ pct = print_chat.print_chat(time=False)
 * .up_on_message(number)
 * .up_on_rows(number)
 * .clear_row()
+* ._clear_screen()
 * .get_senders()                    - returns a list of dictionaries
-* .get_skips()
 
 ## Installation
 Repository cloning
