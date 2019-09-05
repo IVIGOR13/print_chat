@@ -34,7 +34,7 @@ pct.set_colors([
         (senders[1], 'red'),
         (senders[2], 'yellow')
     ])
-pct.add_skip('-Test chat-\n-----------') # adding a header to the dialog
+pct.set_header('-Test chat-\n-----------') # adding a header to the dialog
 
 while True:
     post = str(input('> '))
@@ -81,6 +81,7 @@ pct = print_chat.print_chat(time=False)
 * .edit_mark(number, text)
 * .remove_mark(number)
 * .close(clr)                       - closes the dialog, with or without screen clearing
+* .set_header(string)
 * .set_colors(colors)               - takes a list [[sender, color],..]
    colors list:
      * grey
