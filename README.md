@@ -105,6 +105,10 @@ pct = print_chat.print_chat(time=False)
 * .get_senders()                    - returns a list of dictionaries
 
 ## Installation
+```
+pip install print_chat
+```
+### or
 Repository cloning
 ```
 $ git clone https://github.com/IVIGOR13/print_chat.git
