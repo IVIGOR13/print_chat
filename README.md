@@ -1,6 +1,8 @@
 # print_chat
 Small print tool for implementing chat in the terminal.
 
+https://pypi.org/project/print_chat
+
 ## Usage example
 ```python
 import print_chat as pc
