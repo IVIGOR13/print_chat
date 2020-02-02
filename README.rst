@@ -3,6 +3,8 @@ print_chat
 
 Small print tool for implementing chat in the terminal.
 
+https://pypi.org/project/print_chat/
+
 Usage example
 -------------
 
@@ -118,6 +120,13 @@ Method list
 
 Installation
 ------------
+
+.. code-block::
+
+    $ pip install print_chat
+    
+or
+^^
 Repository cloning
 
 .. code-block::
