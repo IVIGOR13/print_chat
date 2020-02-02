@@ -108,7 +108,7 @@ pct = print_chat.print_chat(time=False)
 
 ## Installation
 ```
-pip install print_chat
+$ pip install print_chat
 ```
 ### or
 Repository cloning
