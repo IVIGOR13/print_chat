@@ -5,7 +5,7 @@ https://pypi.org/project/print_chat
 
 ## Usage example
 ```python
-import print_chat as pc
+from print_chat import print_chat as pc
 
 pct = pc.print_chat()
 
@@ -25,7 +25,7 @@ pct.close()
 ```
 ### For testing the main functionality:
 ```python
-import print_chat as pc
+from print_chat import print_chat as pc
 
 pct = pc.print_chat(time=True)
 
@@ -68,6 +68,8 @@ This is not a bug this is a feature
 ## Create object
 default:
 ```python
+from print_chat import print_chat
+
 pct = print_chat.print_chat(time=False)
 ```
 * time - show message sending time
