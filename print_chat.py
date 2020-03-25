@@ -5,7 +5,6 @@
 import time
 import os
 from termcolor import colored
-from collections import defaultdict
 from datetime import datetime
 import colorama
 
@@ -64,8 +63,6 @@ class print_chat:
     def get_message(self, number):
         if number <= len(self.MESSAGES):
             return self.MESSAGES[len(self.MESSAGES) - number]
-        else:
-            return defaultdict(lambda: "")
 
 
     def get_senders(self):
