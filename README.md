@@ -1,8 +1,6 @@
 # print_chat  [![PyPI](https://img.shields.io/pypi/v/print_chat.svg)](https://pypi.org/project/print_chat/)
 Small print tool for implementing chat in the terminal.
 
-https://pypi.org/project/print_chat
-
 ## Usage example
 ```python
 from print_chat import print_chat as pc
