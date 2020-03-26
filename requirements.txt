@@ -1,0 +1,4 @@
+# This requirements file lists all dependecies for this project.
+# Run 'pip install -r requirements.txt' to install dependencies
+termcolor==1.1.0
+colorama==0.4.3
